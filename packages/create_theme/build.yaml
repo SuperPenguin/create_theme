@@ -1,0 +1,16 @@
+targets:
+  $default:
+    builders:
+      create_theme:
+        enabled: true
+        generate_for:
+          - lib/*
+
+builders:
+  createThemeBuilder:
+    import: 'package:create_theme/builder.dart'
+    builder_factories: ['createThemeBuilder']
+    auto_apply: dependents
+    build_extensions: { '.dart': ['.create_theme.dart'] }
+    build_to: cache
+    applies_builders: ['source_gen|combining_builder']
