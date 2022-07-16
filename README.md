@@ -1,6 +1,26 @@
 # Create Theme
 codegen for flutter ThemeExtension
 
+# Installing
+
+`pubspec.yaml`
+
+Add `build_runner` to dev_dependecies, then add `create_theme` and `create_theme_annotation`
+
+```yaml
+dependencies:
+  create_theme_annotation:
+    git: 
+      url: https://github.com/SuperPenguin/create_theme.git
+      path: packages/create_theme_annotation
+
+dev_dependencies:
+  create_theme:
+    git: 
+      url: https://github.com/SuperPenguin/create_theme.git
+      path: packages/create_theme
+```
+
 # Example
 
 `my_widget.dart`
