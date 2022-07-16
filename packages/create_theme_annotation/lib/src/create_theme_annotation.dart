@@ -1,10 +1,10 @@
 class CreateTheme {
   const CreateTheme({
-    this.themeProperties,
+    this.themeProperties = const {},
     this.createDefault,
   });
 
-  final Map<String, CreateThemeProperties<dynamic>>? themeProperties;
+  final Map<String, CreateThemeProperties<dynamic>> themeProperties;
   final Function? createDefault;
 }
 
