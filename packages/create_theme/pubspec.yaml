@@ -1,6 +1,6 @@
 name: create_theme
 description: A starting point for Dart libraries or applications.
-version: 1.0.0
+version: 0.1.0
 publish_to: none
 
 environment:
@@ -10,7 +10,9 @@ dependencies:
   analyzer: ^4.2.0
   build: ^2.3.0
   create_theme_annotation:
-    path: ../create_theme_annotation
+    git: 
+      url: https://github.com/SuperPenguin/create_theme.git
+      path: packages/create_theme_annotation
   source_gen: ^1.2.2
 
 dev_dependencies:
