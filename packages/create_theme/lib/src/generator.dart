@@ -15,29 +15,27 @@ class CreateThemeGenerator extends GeneratorForAnnotation<CreateTheme> {
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
-    final widgetName = element.name;
-    if (widgetName == null) {
-      throw Exception('@CreateTheme element name is null');
-    }
-    if (widgetName.isEmpty) {
-      throw Exception('@CreateTheme element name is empty String');
-    }
+    final themeName = ThemeName.fromAnnotatedElement(
+      element: element,
+      annotation: annotation,
+    );
 
-    final themeExtensionName = '${widgetName}ThemeData';
-    final themeInheritedName = '${widgetName}Theme';
     final createDefault = annotation.read('createDefault');
     final createDefaultFunction = createDefault.isNull
         ? null
         : createDefault.objectValue.toFunctionValue();
 
     final themeExtensionTemplate = ThemeExtensionTemplate(
-      name: themeExtensionName,
-      properties: ThemeProperties.iterableFromAnnotation(annotation).toList(),
+      name: themeName.extension,
+      properties: ThemeProperties.iterableFromAnnotatedElement(
+        annotation: annotation,
+        themeName: themeName,
+      ).toList(),
     );
 
     final inheritedThemeTemplate = InheritedThemeTemplate(
-      name: themeInheritedName,
-      dataName: themeExtensionName,
+      name: themeName.widget,
+      dataName: themeName.extension,
       createDefaultFunction: createDefaultFunction != null
           ? getFunctionName(createDefaultFunction)
           : null,
@@ -51,6 +49,40 @@ ${inheritedThemeTemplate.generate()}
   }
 }
 
+class ThemeName {
+  const ThemeName({
+    required this.extension,
+    required this.widget,
+  });
+
+  factory ThemeName.fromAnnotatedElement({
+    required Element element,
+    required ConstantReader annotation,
+  }) {
+    final themeName = annotation.read('name');
+    if (themeName.isNull) {
+      final name = element.name;
+
+      if (name == null) {
+        throw Exception('@CreateTheme element name is null');
+      }
+
+      return ThemeName(
+        extension: '${name}ThemeData',
+        widget: '${name}Theme',
+      );
+    }
+
+    return ThemeName(
+      extension: themeName.read('themeExtension').stringValue,
+      widget: themeName.read('themeWidget').stringValue,
+    );
+  }
+
+  final String extension;
+  final String widget;
+}
+
 class ThemeProperties {
   ThemeProperties({
     required this.type,
@@ -62,16 +94,16 @@ class ThemeProperties {
   final String name;
   final String function;
 
-  static Iterable<ThemeProperties> iterableFromAnnotation(
-    ConstantReader annotation, {
-    String? elementName,
+  static Iterable<ThemeProperties> iterableFromAnnotatedElement({
+    required ConstantReader annotation,
+    required ThemeName themeName,
   }) sync* {
     final Map<DartObject?, DartObject?> map =
         annotation.read('themeProperties').mapValue;
 
     if (map.isEmpty) {
       throw Exception(
-        'themeProperties for widget $elementName is empty',
+        'themeProperties for widget ${themeName.extension} is empty',
       );
     }
 

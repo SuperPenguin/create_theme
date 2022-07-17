@@ -102,3 +102,84 @@ class MyWidgetTheme extends InheritedWidget {
     return result;
   }
 }
+
+class HelloThemeData extends ThemeExtension<HelloThemeData> {
+  const HelloThemeData({
+    this.textStyle,
+  });
+
+  final TextStyle? textStyle;
+
+  @override
+  HelloThemeData copyWith({
+    TextStyle? textStyle,
+  }) {
+    return HelloThemeData(
+      textStyle: textStyle ?? this.textStyle,
+    );
+  }
+
+  @override
+  HelloThemeData lerp(
+    ThemeExtension<HelloThemeData>? other,
+    double t,
+  ) {
+    if (other is! HelloThemeData) return this;
+
+    return HelloThemeData(
+      textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
+    );
+  }
+
+  HelloThemeData merge(HelloThemeData? other) {
+    if (other == null) return this;
+
+    return copyWith(
+      textStyle: other.textStyle,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is HelloThemeData && other.textStyle == textStyle;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hashAll([
+      textStyle,
+    ]);
+  }
+}
+
+class WorldTheme extends InheritedWidget {
+  const WorldTheme({
+    super.key,
+    required this.theme,
+    required super.child,
+  });
+
+  final HelloThemeData theme;
+
+  @override
+  bool updateShouldNotify(WorldTheme oldWidget) {
+    return oldWidget.theme != theme;
+  }
+
+  static HelloThemeData of(BuildContext context) {
+    final widget = context.dependOnInheritedWidgetOfExactType<WorldTheme>();
+    final localTheme = widget?.theme;
+
+    final theme = Theme.of(context);
+    final rootTheme = theme.extensions[HelloThemeData] as HelloThemeData?;
+
+    final result = rootTheme?.merge(localTheme);
+    if (result != null) return result;
+
+    throw Exception(
+      'Unable to get any HelloThemeData, add createDefault to @CreateTheme or add HelloThemeData to your ThemeData extension',
+    );
+  }
+}

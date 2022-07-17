@@ -68,3 +68,26 @@ class CreateThemeTextStyle extends CreateThemeProperties<TextStyle> {
   const CreateThemeTextStyle()
       : super(propertiesType: TextStyle, lerp: TextStyle.lerp);
 }
+
+@CreateTheme(
+  name: CreateThemeName(
+    themeExtension: 'HelloThemeData',
+    themeWidget: 'WorldTheme',
+  ),
+  themeProperties: {
+    'textStyle': CreateThemeTextStyle(),
+  },
+)
+class HelloWorld extends StatelessWidget {
+  const HelloWorld({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final HelloThemeData theme = WorldTheme.of(context);
+
+    return Text(
+      'Hello World',
+      style: theme.textStyle,
+    );
+  }
+}
