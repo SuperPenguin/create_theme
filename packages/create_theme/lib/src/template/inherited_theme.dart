@@ -59,7 +59,7 @@ class $name extends InheritedWidget {
     final rootTheme = theme.extensions[$dataName] as $dataName?;
 
     final $dataName defaultTheme = $createDefaultFunction(theme);
-    final result = defaultTheme.merge(rootTheme?.merge(localTheme));
+    final result = defaultTheme.merge(rootTheme).merge(localTheme);
 
     return result;
   }
