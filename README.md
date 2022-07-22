@@ -1,1 +1,1 @@
-./packages/create_theme/README.md
+packages/create_theme/README.md
