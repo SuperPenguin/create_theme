@@ -6,14 +6,14 @@ String getFunctionName(ExecutableElement e) {
   }
 
   if (e is MethodElement) {
-    return '${e.enclosingElement.name}.${e.name}';
+    return '${e.enclosingElement3.name}.${e.name}';
   }
 
   if (e is ConstructorElement) {
     if (e.name.isEmpty) {
-      return e.enclosingElement.name;
+      return e.enclosingElement3.name;
     }
-    return '${e.enclosingElement.name}.${e.name}';
+    return '${e.enclosingElement3.name}.${e.name}';
   }
 
   throw UnsupportedError(
