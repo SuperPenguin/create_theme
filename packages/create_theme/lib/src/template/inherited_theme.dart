@@ -33,25 +33,38 @@ class $name extends InheritedWidget {
   String get generateInheritedOf {
     if (createDefaultFunction == null) {
       return '''
-  static $dataName of(BuildContext context) {
+  static $dataName? maybeOf(BuildContext context) {
     final widget = context.dependOnInheritedWidgetOfExactType<$name>();
     final localTheme = widget?.theme;
 
     final theme = Theme.of(context);
     final rootTheme = theme.extensions[$dataName] as $dataName?;
 
-    final result = rootTheme?.merge(localTheme);
-    if (result != null) return result;
+    return rootTheme?.merge(localTheme);
+  }
+  
+  static $dataName of(BuildContext context) {
+    final result = maybeOf(context);
 
-    throw Exception(
-      'Unable to get any $dataName, add createDefault to @CreateTheme or add $dataName to your ThemeData extension',
-    );
+    assert(() {
+      if (result == null) {
+        throw FlutterError.fromParts([
+          ErrorSummary(
+            'Unable to get any $dataName, add createDefault to @CreateTheme or add $dataName to your ThemeData extension',
+          ),
+          context.describeElement('The context used was'),
+        ]);
+      }
+      return true;
+    });
+
+    return result!;
   }
 ''';
     }
 
     return '''
-  static $dataName of(BuildContext context) {
+  static $dataName? maybeOf(BuildContext context) {
     final widget = context.dependOnInheritedWidgetOfExactType<$name>();
     final localTheme = widget?.theme;
 
@@ -62,6 +75,24 @@ class $name extends InheritedWidget {
     final result = defaultTheme.merge(rootTheme).merge(localTheme);
 
     return result;
+  }
+  
+  static $dataName of(BuildContext context) {
+    final result = maybeOf(context);
+
+    assert(() {
+      if (result == null) {
+        throw FlutterError.fromParts([
+          ErrorSummary(
+            'Unable to get any $dataName, add createDefault to @CreateTheme or add $dataName to your ThemeData extension',
+          ),
+          context.describeElement('The context used was'),
+        ]);
+      }
+      return true;
+    });
+
+    return result!;
   }
 ''';
   }
