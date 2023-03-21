@@ -89,17 +89,35 @@ class MyWidgetTheme extends InheritedWidget {
     return oldWidget.theme != theme;
   }
 
-  static MyWidgetThemeData of(BuildContext context) {
+  static MyWidgetThemeData? maybeOf(BuildContext context) {
     final widget = context.dependOnInheritedWidgetOfExactType<MyWidgetTheme>();
     final localTheme = widget?.theme;
 
     final theme = Theme.of(context);
-    final rootTheme = theme.extensions[MyWidgetThemeData] as MyWidgetThemeData?;
+    final rootTheme = theme.extension<MyWidgetThemeData>();
 
     final MyWidgetThemeData defaultTheme = _createDefault(theme);
-    final result = defaultTheme.merge(rootTheme?.merge(localTheme));
+    final result = defaultTheme.merge(rootTheme).merge(localTheme);
 
     return result;
+  }
+
+  static MyWidgetThemeData of(BuildContext context) {
+    final result = maybeOf(context);
+
+    assert(() {
+      if (result == null) {
+        throw FlutterError.fromParts([
+          ErrorSummary(
+            'Unable to get any MyWidgetThemeData from context, add createDefault to @CreateTheme or add MyWidgetThemeData to your ThemeData extension',
+          ),
+          context.describeElement('The context used was'),
+        ]);
+      }
+      return true;
+    }());
+
+    return result!;
   }
 }
 
@@ -168,18 +186,31 @@ class WorldTheme extends InheritedWidget {
     return oldWidget.theme != theme;
   }
 
-  static HelloThemeData of(BuildContext context) {
+  static HelloThemeData? maybeOf(BuildContext context) {
     final widget = context.dependOnInheritedWidgetOfExactType<WorldTheme>();
     final localTheme = widget?.theme;
 
     final theme = Theme.of(context);
-    final rootTheme = theme.extensions[HelloThemeData] as HelloThemeData?;
+    final rootTheme = theme.extension<HelloThemeData>();
 
-    final result = rootTheme?.merge(localTheme);
-    if (result != null) return result;
+    return rootTheme?.merge(localTheme);
+  }
 
-    throw Exception(
-      'Unable to get any HelloThemeData, add createDefault to @CreateTheme or add HelloThemeData to your ThemeData extension',
-    );
+  static HelloThemeData of(BuildContext context) {
+    final result = maybeOf(context);
+
+    assert(() {
+      if (result == null) {
+        throw FlutterError.fromParts([
+          ErrorSummary(
+            'Unable to get any HelloThemeData from context, add createDefault to @CreateTheme or add HelloThemeData to your ThemeData extension',
+          ),
+          context.describeElement('The context used was'),
+        ]);
+      }
+      return true;
+    }());
+
+    return result!;
   }
 }
