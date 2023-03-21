@@ -1,6 +1,6 @@
 name: create_theme
 description: Code generator for flutter ThemeExtension
-version: 0.4.0
+version: 0.4.1
 homepage: https://github.com/SuperPenguin/create_theme
 repository: https://github.com/SuperPenguin/create_theme
 issue_tracker: https://github.com/SuperPenguin/create_theme/issues
