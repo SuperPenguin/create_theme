@@ -4,7 +4,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   create_theme_annotation:
@@ -16,7 +16,7 @@ dependencies:
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
-  build_runner: ^2.2.0
+  build_runner: ^2.4.6
   create_theme:
     git: 
       url: https://github.com/SuperPenguin/create_theme.git
