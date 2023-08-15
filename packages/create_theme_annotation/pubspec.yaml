@@ -1,12 +1,12 @@
 name: create_theme_annotation
 description: Annotation for create_theme code generator
-version: 0.4.0
+version: 0.5.0
 homepage: https://github.com/SuperPenguin/create_theme
 repository: https://github.com/SuperPenguin/create_theme
 issue_tracker: https://github.com/SuperPenguin/create_theme/issues
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dev_dependencies:
-  lints: ^2.0.0
+  lints: ^2.1.1
