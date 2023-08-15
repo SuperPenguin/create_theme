@@ -10,7 +10,7 @@ builders:
   createThemeBuilder:
     import: 'package:create_theme/builder.dart'
     builder_factories: ['createThemeBuilder']
+    build_extensions: { '.dart': ['create_theme.g.part'] }
     auto_apply: dependents
-    build_extensions: { '.dart': ['.create_theme.dart'] }
     build_to: cache
     applies_builders: ['source_gen|combining_builder']
