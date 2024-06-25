@@ -11,18 +11,23 @@ class InheritedThemeTemplate {
 
   String generate() {
     return '''
-class $name extends InheritedWidget {
+class $name extends InheritedTheme {
   const $name({
     super.key,
-    required this.theme,
+    required this.data,
     required super.child,
   });
 
-  final $dataName theme;
+  final $dataName data;
+
+  @override
+  Widget wrap(BuildContext context, Widget child) {
+    return $name(data: data, child: child);
+  }
 
   @override
   bool updateShouldNotify($name oldWidget) {
-    return oldWidget.theme != theme;
+    return oldWidget.data != data;
   }
 
   $generateInheritedOf
@@ -38,7 +43,7 @@ class $name extends InheritedWidget {
       maybeOf = '''
   static $dataName? maybeOf(BuildContext context) {
     final widget = context.dependOnInheritedWidgetOfExactType<$name>();
-    final localTheme = widget?.theme;
+    final localTheme = widget?.data;
 
     final theme = Theme.of(context);
     final rootTheme = theme.extension<$dataName>();
@@ -50,7 +55,7 @@ class $name extends InheritedWidget {
       maybeOf = '''
   static $dataName? maybeOf(BuildContext context) {
     final widget = context.dependOnInheritedWidgetOfExactType<$name>();
-    final localTheme = widget?.theme;
+    final localTheme = widget?.data;
 
     final theme = Theme.of(context);
     final rootTheme = theme.extension<$dataName>();

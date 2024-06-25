@@ -77,23 +77,28 @@ class MyWidgetThemeData extends ThemeExtension<MyWidgetThemeData> {
   }
 }
 
-class MyWidgetTheme extends InheritedWidget {
+class MyWidgetTheme extends InheritedTheme {
   const MyWidgetTheme({
     super.key,
-    required this.theme,
+    required this.data,
     required super.child,
   });
 
-  final MyWidgetThemeData theme;
+  final MyWidgetThemeData data;
+
+  @override
+  Widget wrap(BuildContext context, Widget child) {
+    return MyWidgetTheme(data: data, child: child);
+  }
 
   @override
   bool updateShouldNotify(MyWidgetTheme oldWidget) {
-    return oldWidget.theme != theme;
+    return oldWidget.data != data;
   }
 
   static MyWidgetThemeData? maybeOf(BuildContext context) {
     final widget = context.dependOnInheritedWidgetOfExactType<MyWidgetTheme>();
-    final localTheme = widget?.theme;
+    final localTheme = widget?.data;
 
     final theme = Theme.of(context);
     final rootTheme = theme.extension<MyWidgetThemeData>();
@@ -176,23 +181,28 @@ class HelloThemeData extends ThemeExtension<HelloThemeData> {
   }
 }
 
-class WorldTheme extends InheritedWidget {
+class WorldTheme extends InheritedTheme {
   const WorldTheme({
     super.key,
-    required this.theme,
+    required this.data,
     required super.child,
   });
 
-  final HelloThemeData theme;
+  final HelloThemeData data;
+
+  @override
+  Widget wrap(BuildContext context, Widget child) {
+    return WorldTheme(data: data, child: child);
+  }
 
   @override
   bool updateShouldNotify(WorldTheme oldWidget) {
-    return oldWidget.theme != theme;
+    return oldWidget.data != data;
   }
 
   static HelloThemeData? maybeOf(BuildContext context) {
     final widget = context.dependOnInheritedWidgetOfExactType<WorldTheme>();
-    final localTheme = widget?.theme;
+    final localTheme = widget?.data;
 
     final theme = Theme.of(context);
     final rootTheme = theme.extension<HelloThemeData>();

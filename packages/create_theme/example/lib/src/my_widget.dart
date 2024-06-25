@@ -3,6 +3,24 @@ import 'package:flutter/material.dart';
 
 part 'my_widget.g.dart';
 
+class CreateThemeColor extends CreateThemeProperties<Color> {
+  const CreateThemeColor();
+
+  @override
+  Color? lerp(Color? a, Color? b, double t) {
+    return Color.lerp(a, b, t);
+  }
+}
+
+class CreateThemeTextStyle extends CreateThemeProperties<TextStyle> {
+  const CreateThemeTextStyle();
+
+  @override
+  TextStyle? lerp(TextStyle? a, TextStyle? b, double t) {
+    return TextStyle.lerp(a, b, t);
+  }
+}
+
 class MyWidgetTemplate extends CreateTheme {
   const MyWidgetTemplate()
       : super(
@@ -62,24 +80,6 @@ class MyWidget extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-class CreateThemeColor extends CreateThemeProperties<Color> {
-  const CreateThemeColor();
-
-  @override
-  Color? lerp(Color? a, Color? b, double t) {
-    return Color.lerp(a, b, t);
-  }
-}
-
-class CreateThemeTextStyle extends CreateThemeProperties<TextStyle> {
-  const CreateThemeTextStyle();
-
-  @override
-  TextStyle? lerp(TextStyle? a, TextStyle? b, double t) {
-    return TextStyle.lerp(a, b, t);
   }
 }
 
