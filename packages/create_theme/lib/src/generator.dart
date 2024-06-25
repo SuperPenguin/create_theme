@@ -119,21 +119,15 @@ class ThemeProperties {
         );
       }
 
-      final ConstantReader value = ConstantReader(prop.value);
-      final DartType type = value.read('propertiesType').typeValue;
-      final ExecutableElement? lerp =
-          value.read('lerp').objectValue.toFunctionValue();
-
-      if (lerp == null) {
-        throw Exception(
-          '$name lerp is not a function',
-        );
-      }
+      final DartType type = prop.value!.type!;
+      final ClassElement element = type.element as ClassElement;
+      final DartType genericType = element.supertype!.typeArguments.first;
+      final String className = element.name;
 
       yield ThemeProperties(
-        type: type.getDisplayString(withNullability: false),
+        type: genericType.element!.name!,
         name: name,
-        function: getFunctionName(lerp),
+        function: 'const $className().lerp',
       );
     }
   }

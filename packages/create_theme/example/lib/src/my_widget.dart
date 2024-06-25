@@ -3,28 +3,33 @@ import 'package:flutter/material.dart';
 
 part 'my_widget.g.dart';
 
-MyWidgetThemeData _createDefault(ThemeData theme) {
-  return MyWidgetThemeData(
-    headerColor: theme.colorScheme.primary,
-    headerTextStyle: TextStyle(
-      color: theme.colorScheme.onPrimary,
-    ),
-    backgroundColor: theme.scaffoldBackgroundColor,
-  );
+class MyWidgetTemplate extends CreateTheme {
+  const MyWidgetTemplate()
+      : super(
+          themeProperties: const {
+            'headerColor': CreateThemeColor(),
+            'headerTextStyle': CreateThemeTextStyle(),
+            'backgroundColor': CreateThemeColor(),
+          },
+          createDefault: _createDefault,
+        );
+
+  static MyWidgetThemeData _createDefault(ThemeData theme) {
+    return MyWidgetThemeData(
+      headerColor: theme.colorScheme.primary,
+      headerTextStyle: TextStyle(
+        color: theme.colorScheme.onPrimary,
+      ),
+      backgroundColor: theme.scaffoldBackgroundColor,
+    );
+  }
 }
 
-@CreateTheme(
-  themeProperties: {
-    'headerColor': CreateThemeColor(),
-    'headerTextStyle': CreateThemeTextStyle(),
-    'backgroundColor': CreateThemeColor(),
-  },
-  createDefault: _createDefault,
-)
+@MyWidgetTemplate()
 class MyWidget extends StatelessWidget {
   const MyWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -61,12 +66,21 @@ class MyWidget extends StatelessWidget {
 }
 
 class CreateThemeColor extends CreateThemeProperties<Color> {
-  const CreateThemeColor() : super(propertiesType: Color, lerp: Color.lerp);
+  const CreateThemeColor();
+
+  @override
+  Color? lerp(Color? a, Color? b, double t) {
+    return Color.lerp(a, b, t);
+  }
 }
 
 class CreateThemeTextStyle extends CreateThemeProperties<TextStyle> {
-  const CreateThemeTextStyle()
-      : super(propertiesType: TextStyle, lerp: TextStyle.lerp);
+  const CreateThemeTextStyle();
+
+  @override
+  TextStyle? lerp(TextStyle? a, TextStyle? b, double t) {
+    return TextStyle.lerp(a, b, t);
+  }
 }
 
 @CreateTheme(
@@ -79,7 +93,7 @@ class CreateThemeTextStyle extends CreateThemeProperties<TextStyle> {
   },
 )
 class HelloWorld extends StatelessWidget {
-  const HelloWorld({Key? key}) : super(key: key);
+  const HelloWorld({super.key});
 
   @override
   Widget build(BuildContext context) {

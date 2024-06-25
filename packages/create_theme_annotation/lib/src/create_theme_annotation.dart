@@ -11,13 +11,9 @@ class CreateTheme {
 }
 
 abstract class CreateThemeProperties<T> {
-  const CreateThemeProperties({
-    required this.propertiesType,
-    required this.lerp,
-  });
+  const CreateThemeProperties();
 
-  final Type propertiesType;
-  final T? Function(T? a, T? b, double t) lerp;
+  T? lerp(T? a, T? b, double t);
 }
 
 class CreateThemeName {

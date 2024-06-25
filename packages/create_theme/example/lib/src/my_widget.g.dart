@@ -38,10 +38,12 @@ class MyWidgetThemeData extends ThemeExtension<MyWidgetThemeData> {
     if (other is! MyWidgetThemeData) return this;
 
     return MyWidgetThemeData(
-      headerColor: Color.lerp(headerColor, other.headerColor, t),
-      headerTextStyle:
-          TextStyle.lerp(headerTextStyle, other.headerTextStyle, t),
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
+      headerColor:
+          const CreateThemeColor().lerp(headerColor, other.headerColor, t),
+      headerTextStyle: const CreateThemeTextStyle()
+          .lerp(headerTextStyle, other.headerTextStyle, t),
+      backgroundColor: const CreateThemeColor()
+          .lerp(backgroundColor, other.backgroundColor, t),
     );
   }
 
@@ -96,7 +98,8 @@ class MyWidgetTheme extends InheritedWidget {
     final theme = Theme.of(context);
     final rootTheme = theme.extension<MyWidgetThemeData>();
 
-    final MyWidgetThemeData defaultTheme = _createDefault(theme);
+    final MyWidgetThemeData defaultTheme =
+        MyWidgetTemplate._createDefault(theme);
     final result = defaultTheme.merge(rootTheme).merge(localTheme);
 
     return result;
@@ -145,7 +148,8 @@ class HelloThemeData extends ThemeExtension<HelloThemeData> {
     if (other is! HelloThemeData) return this;
 
     return HelloThemeData(
-      textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
+      textStyle:
+          const CreateThemeTextStyle().lerp(textStyle, other.textStyle, t),
     );
   }
 

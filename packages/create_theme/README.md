@@ -39,8 +39,8 @@ MyWidgetThemeData _createDefault(ThemeData theme) {
 )
 class MyWidget extends StatelessWidget {
   const MyWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -77,14 +77,45 @@ class MyWidget extends StatelessWidget {
 }
 
 class CreateThemeColor extends CreateThemeProperties<Color> {
-  const CreateThemeColor() : super(propertiesType: Color, lerp: Color.lerp);
+  const CreateThemeColor();
+
+  @override
+  Color? lerp(Color? a, Color? b, double t) {
+    return Color.lerp(a, b, t);
+  }
 }
 
 class CreateThemeTextStyle extends CreateThemeProperties<TextStyle> {
-  const CreateThemeTextStyle()
-      : super(propertiesType: TextStyle, lerp: TextStyle.lerp);
+  const CreateThemeTextStyle();
+
+  @override
+  TextStyle? lerp(TextStyle? a, TextStyle? b, double t) {
+    return TextStyle.lerp(a, b, t);
+  }
 }
 
+@CreateTheme(
+  name: CreateThemeName(
+    themeExtension: 'HelloThemeData',
+    themeWidget: 'WorldTheme',
+  ),
+  themeProperties: {
+    'textStyle': CreateThemeTextStyle(),
+  },
+)
+class HelloWorld extends StatelessWidget {
+  const HelloWorld({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final HelloThemeData theme = WorldTheme.of(context);
+
+    return Text(
+      'Hello World',
+      style: theme.textStyle,
+    );
+  }
+}
 ```
 
 `my_widget.g.dart`
@@ -130,10 +161,12 @@ class MyWidgetThemeData extends ThemeExtension<MyWidgetThemeData> {
     if (other is! MyWidgetThemeData) return this;
 
     return MyWidgetThemeData(
-      headerColor: Color.lerp(headerColor, other.headerColor, t),
-      headerTextStyle:
-          TextStyle.lerp(headerTextStyle, other.headerTextStyle, t),
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
+      headerColor:
+          const CreateThemeColor().lerp(headerColor, other.headerColor, t),
+      headerTextStyle: const CreateThemeTextStyle()
+          .lerp(headerTextStyle, other.headerTextStyle, t),
+      backgroundColor: const CreateThemeColor()
+          .lerp(backgroundColor, other.backgroundColor, t),
     );
   }
 
@@ -181,17 +214,130 @@ class MyWidgetTheme extends InheritedWidget {
     return oldWidget.theme != theme;
   }
 
-  static MyWidgetThemeData of(BuildContext context) {
+  static MyWidgetThemeData? maybeOf(BuildContext context) {
     final widget = context.dependOnInheritedWidgetOfExactType<MyWidgetTheme>();
     final localTheme = widget?.theme;
 
     final theme = Theme.of(context);
-    final rootTheme = theme.extensions[MyWidgetThemeData] as MyWidgetThemeData?;
+    final rootTheme = theme.extension<MyWidgetThemeData>();
 
     final MyWidgetThemeData defaultTheme = _createDefault(theme);
-    final result = defaultTheme.merge(rootTheme?.merge(localTheme));
+    final result = defaultTheme.merge(rootTheme).merge(localTheme);
 
     return result;
+  }
+
+  static MyWidgetThemeData of(BuildContext context) {
+    final result = maybeOf(context);
+
+    assert(() {
+      if (result == null) {
+        throw FlutterError.fromParts([
+          ErrorSummary(
+            'Unable to get any MyWidgetThemeData from context, add createDefault to @CreateTheme or add MyWidgetThemeData to your ThemeData extension',
+          ),
+          context.describeElement('The context used was'),
+        ]);
+      }
+      return true;
+    }());
+
+    return result!;
+  }
+}
+
+class HelloThemeData extends ThemeExtension<HelloThemeData> {
+  const HelloThemeData({
+    this.textStyle,
+  });
+
+  final TextStyle? textStyle;
+
+  @override
+  HelloThemeData copyWith({
+    TextStyle? textStyle,
+  }) {
+    return HelloThemeData(
+      textStyle: textStyle ?? this.textStyle,
+    );
+  }
+
+  @override
+  HelloThemeData lerp(
+    ThemeExtension<HelloThemeData>? other,
+    double t,
+  ) {
+    if (other is! HelloThemeData) return this;
+
+    return HelloThemeData(
+      textStyle:
+          const CreateThemeTextStyle().lerp(textStyle, other.textStyle, t),
+    );
+  }
+
+  HelloThemeData merge(HelloThemeData? other) {
+    if (other == null) return this;
+
+    return copyWith(
+      textStyle: other.textStyle,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is HelloThemeData && other.textStyle == textStyle;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hashAll([
+      textStyle,
+    ]);
+  }
+}
+
+class WorldTheme extends InheritedWidget {
+  const WorldTheme({
+    super.key,
+    required this.theme,
+    required super.child,
+  });
+
+  final HelloThemeData theme;
+
+  @override
+  bool updateShouldNotify(WorldTheme oldWidget) {
+    return oldWidget.theme != theme;
+  }
+
+  static HelloThemeData? maybeOf(BuildContext context) {
+    final widget = context.dependOnInheritedWidgetOfExactType<WorldTheme>();
+    final localTheme = widget?.theme;
+
+    final theme = Theme.of(context);
+    final rootTheme = theme.extension<HelloThemeData>();
+
+    return rootTheme?.merge(localTheme);
+  }
+
+  static HelloThemeData of(BuildContext context) {
+    final result = maybeOf(context);
+
+    assert(() {
+      if (result == null) {
+        throw FlutterError.fromParts([
+          ErrorSummary(
+            'Unable to get any HelloThemeData from context, add createDefault to @CreateTheme or add HelloThemeData to your ThemeData extension',
+          ),
+          context.describeElement('The context used was'),
+        ]);
+      }
+      return true;
+    }());
+
+    return result!;
   }
 }
 ```
