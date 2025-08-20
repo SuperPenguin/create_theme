@@ -1,22 +1,21 @@
-import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 
-String getFunctionName(ExecutableElement e) {
-  if (e is FunctionElement) {
-    return e.name;
+String getFunctionName(ExecutableElement2 e) {
+  if (e is TopLevelFunctionElement) {
+    return e.name3!;
   }
 
-  if (e is MethodElement) {
-    return '${e.enclosingElement.name}.${e.name}';
+  if (e is MethodElement2) {
+    return '${e.enclosingElement2!.name3!}.${e.name3!}';
   }
 
-  if (e is ConstructorElement) {
-    if (e.name.isEmpty) {
-      return e.enclosingElement.name;
+  if (e is ConstructorElement2) {
+    // The default constructor.
+    if (e.name3 == 'new') {
+      return e.enclosingElement2.name3!;
     }
-    return '${e.enclosingElement.name}.${e.name}';
+    return '${e.enclosingElement2.name3!}.${e.name3!}';
   }
 
-  throw UnsupportedError(
-    'Not sure how to support typeof ${e.runtimeType}',
-  );
+  throw UnsupportedError('Not sure how to support typeof ${e.runtimeType}');
 }

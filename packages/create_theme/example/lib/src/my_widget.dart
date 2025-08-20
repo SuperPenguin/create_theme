@@ -6,9 +6,7 @@ part 'my_widget.g.dart';
 MyWidgetThemeData _createDefault(ThemeData theme) {
   return MyWidgetThemeData(
     headerColor: theme.colorScheme.primary,
-    headerTextStyle: TextStyle(
-      color: theme.colorScheme.onPrimary,
-    ),
+    headerTextStyle: TextStyle(color: theme.colorScheme.onPrimary),
     backgroundColor: theme.scaffoldBackgroundColor,
   );
 }
@@ -22,9 +20,7 @@ MyWidgetThemeData _createDefault(ThemeData theme) {
   createDefault: _createDefault,
 )
 class MyWidget extends StatelessWidget {
-  const MyWidget({
-    Key? key,
-  }) : super(key: key);
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +34,7 @@ class MyWidget extends StatelessWidget {
             style: theme.headerTextStyle,
             child: const Padding(
               padding: EdgeInsets.all(8.0),
-              child: Center(
-                child: Text('Header'),
-              ),
+              child: Center(child: Text('Header')),
             ),
           ),
         ),
@@ -49,9 +43,7 @@ class MyWidget extends StatelessWidget {
             color: theme.backgroundColor,
             child: const Padding(
               padding: EdgeInsets.all(8.0),
-              child: Center(
-                child: Text('Body'),
-              ),
+              child: Center(child: Text('Body')),
             ),
           ),
         ),
@@ -66,7 +58,7 @@ class CreateThemeColor extends CreateThemeProperties<Color> {
 
 class CreateThemeTextStyle extends CreateThemeProperties<TextStyle> {
   const CreateThemeTextStyle()
-      : super(propertiesType: TextStyle, lerp: TextStyle.lerp);
+    : super(propertiesType: TextStyle, lerp: TextStyle.lerp);
 }
 
 @CreateTheme(
@@ -74,20 +66,15 @@ class CreateThemeTextStyle extends CreateThemeProperties<TextStyle> {
     themeExtension: 'HelloThemeData',
     themeWidget: 'WorldTheme',
   ),
-  themeProperties: {
-    'textStyle': CreateThemeTextStyle(),
-  },
+  themeProperties: {'textStyle': CreateThemeTextStyle()},
 )
 class HelloWorld extends StatelessWidget {
-  const HelloWorld({Key? key}) : super(key: key);
+  const HelloWorld({super.key});
 
   @override
   Widget build(BuildContext context) {
     final HelloThemeData theme = WorldTheme.of(context);
 
-    return Text(
-      'Hello World',
-      style: theme.textStyle,
-    );
+    return Text('Hello World', style: theme.textStyle);
   }
 }

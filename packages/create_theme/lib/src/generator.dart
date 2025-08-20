@@ -1,5 +1,5 @@
 import 'package:analyzer/dart/constant/value.dart';
-import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:create_theme/src/commons.dart';
@@ -11,7 +11,7 @@ import 'package:source_gen/source_gen.dart';
 class CreateThemeGenerator extends GeneratorForAnnotation<CreateTheme> {
   @override
   String generateForAnnotatedElement(
-    Element element,
+    Element2 element,
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
@@ -23,7 +23,7 @@ class CreateThemeGenerator extends GeneratorForAnnotation<CreateTheme> {
     final createDefault = annotation.read('createDefault');
     final createDefaultFunction = createDefault.isNull
         ? null
-        : createDefault.objectValue.toFunctionValue();
+        : createDefault.objectValue.toFunctionValue2();
 
     final themeExtensionTemplate = ThemeExtensionTemplate(
       name: themeName.extension,
@@ -50,27 +50,21 @@ ${inheritedThemeTemplate.generate()}
 }
 
 class ThemeName {
-  const ThemeName({
-    required this.extension,
-    required this.widget,
-  });
+  const ThemeName({required this.extension, required this.widget});
 
   factory ThemeName.fromAnnotatedElement({
-    required Element element,
+    required Element2 element,
     required ConstantReader annotation,
   }) {
     final themeName = annotation.read('name');
     if (themeName.isNull) {
-      final name = element.name;
+      final name = element.name3;
 
       if (name == null) {
         throw Exception('@CreateTheme element name is null');
       }
 
-      return ThemeName(
-        extension: '${name}ThemeData',
-        widget: '${name}Theme',
-      );
+      return ThemeName(extension: '${name}ThemeData', widget: '${name}Theme');
     }
 
     return ThemeName(
@@ -98,8 +92,9 @@ class ThemeProperties {
     required ConstantReader annotation,
     required ThemeName themeName,
   }) sync* {
-    final Map<DartObject?, DartObject?> map =
-        annotation.read('themeProperties').mapValue;
+    final Map<DartObject?, DartObject?> map = annotation
+        .read('themeProperties')
+        .mapValue;
 
     if (map.isEmpty) {
       throw Exception(
@@ -114,24 +109,22 @@ class ThemeProperties {
       }
 
       if (name.isEmpty) {
-        throw Exception(
-          'One of themeProperties key is an empty String',
-        );
+        throw Exception('One of themeProperties key is an empty String');
       }
 
       final ConstantReader value = ConstantReader(prop.value);
       final DartType type = value.read('propertiesType').typeValue;
-      final ExecutableElement? lerp =
-          value.read('lerp').objectValue.toFunctionValue();
+      final ExecutableElement2? lerp = value
+          .read('lerp')
+          .objectValue
+          .toFunctionValue2();
 
       if (lerp == null) {
-        throw Exception(
-          '$name lerp is not a function',
-        );
+        throw Exception('$name lerp is not a function');
       }
 
       yield ThemeProperties(
-        type: type.getDisplayString(withNullability: false),
+        type: type.getDisplayString(),
         name: name,
         function: getFunctionName(lerp),
       );

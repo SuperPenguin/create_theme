@@ -31,16 +31,16 @@ class MyWidgetThemeData extends ThemeExtension<MyWidgetThemeData> {
   }
 
   @override
-  MyWidgetThemeData lerp(
-    ThemeExtension<MyWidgetThemeData>? other,
-    double t,
-  ) {
+  MyWidgetThemeData lerp(ThemeExtension<MyWidgetThemeData>? other, double t) {
     if (other is! MyWidgetThemeData) return this;
 
     return MyWidgetThemeData(
       headerColor: Color.lerp(headerColor, other.headerColor, t),
-      headerTextStyle:
-          TextStyle.lerp(headerTextStyle, other.headerTextStyle, t),
+      headerTextStyle: TextStyle.lerp(
+        headerTextStyle,
+        other.headerTextStyle,
+        t,
+      ),
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
     );
   }
@@ -67,20 +67,12 @@ class MyWidgetThemeData extends ThemeExtension<MyWidgetThemeData> {
 
   @override
   int get hashCode {
-    return Object.hashAll([
-      headerColor,
-      headerTextStyle,
-      backgroundColor,
-    ]);
+    return Object.hashAll([headerColor, headerTextStyle, backgroundColor]);
   }
 }
 
 class MyWidgetTheme extends InheritedWidget {
-  const MyWidgetTheme({
-    super.key,
-    required this.theme,
-    required super.child,
-  });
+  const MyWidgetTheme({super.key, required this.theme, required super.child});
 
   final MyWidgetThemeData theme;
 
@@ -122,26 +114,17 @@ class MyWidgetTheme extends InheritedWidget {
 }
 
 class HelloThemeData extends ThemeExtension<HelloThemeData> {
-  const HelloThemeData({
-    this.textStyle,
-  });
+  const HelloThemeData({this.textStyle});
 
   final TextStyle? textStyle;
 
   @override
-  HelloThemeData copyWith({
-    TextStyle? textStyle,
-  }) {
-    return HelloThemeData(
-      textStyle: textStyle ?? this.textStyle,
-    );
+  HelloThemeData copyWith({TextStyle? textStyle}) {
+    return HelloThemeData(textStyle: textStyle ?? this.textStyle);
   }
 
   @override
-  HelloThemeData lerp(
-    ThemeExtension<HelloThemeData>? other,
-    double t,
-  ) {
+  HelloThemeData lerp(ThemeExtension<HelloThemeData>? other, double t) {
     if (other is! HelloThemeData) return this;
 
     return HelloThemeData(
@@ -152,9 +135,7 @@ class HelloThemeData extends ThemeExtension<HelloThemeData> {
   HelloThemeData merge(HelloThemeData? other) {
     if (other == null) return this;
 
-    return copyWith(
-      textStyle: other.textStyle,
-    );
+    return copyWith(textStyle: other.textStyle);
   }
 
   @override
@@ -166,18 +147,12 @@ class HelloThemeData extends ThemeExtension<HelloThemeData> {
 
   @override
   int get hashCode {
-    return Object.hashAll([
-      textStyle,
-    ]);
+    return Object.hashAll([textStyle]);
   }
 }
 
 class WorldTheme extends InheritedWidget {
-  const WorldTheme({
-    super.key,
-    required this.theme,
-    required super.child,
-  });
+  const WorldTheme({super.key, required this.theme, required super.child});
 
   final HelloThemeData theme;
 

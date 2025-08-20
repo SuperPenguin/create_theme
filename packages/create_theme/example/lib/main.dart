@@ -6,29 +6,22 @@ Future<void> main() async {
 }
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      themeMode: ThemeMode.system,
-      home: Home(),
-    );
+    return const MaterialApp(themeMode: ThemeMode.system, home: Home());
   }
 }
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Theme demo'),
-      ),
-      body: const SafeArea(
-        child: MyWidget(),
-      ),
+      appBar: AppBar(title: const Text('Create Theme demo')),
+      body: const SafeArea(child: MyWidget()),
     );
   }
 }
